@@ -90,6 +90,9 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "DRF E-COMMERCE API",
     "VERSION": "0.0.1",
     "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "persistAuthorization": True,
+    }
 }
 
 # Database

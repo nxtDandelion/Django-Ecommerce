@@ -14,3 +14,8 @@ def generate_unique_code(model: BaseModel, field: str) -> str:
     if similar_object_exist:
         return generate_unique_code(model, field)
     return unique_code
+
+def set_dict_attr(obj, data):
+    for attr, value in data.items():
+        setattr(obj, attr, value)
+    return obj
