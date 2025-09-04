@@ -36,7 +36,7 @@ class Product(IsDeletedModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     in_stock = models.IntegerField(default=5)
 
-    image1 = models.ImageField(upload_to='product_images/')
+    image1 = models.ImageField(upload_to='product_images/', blank=True)
     image2 = models.ImageField(upload_to='product_images/', blank=True)
     image3 = models.ImageField(upload_to='product_images/', blank=True)
 

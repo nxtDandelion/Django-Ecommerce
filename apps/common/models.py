@@ -40,7 +40,7 @@ class IsDeletedModel(BaseModel):
     class Meta:
         abstract = True
 
-    objects = IsDeleteManager
+    objects = IsDeleteManager()
 
     def delete(self, *args, **kwargs):
         self.is_deleted = True

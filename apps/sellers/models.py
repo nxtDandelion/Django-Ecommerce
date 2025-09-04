@@ -3,6 +3,7 @@ from django.db.models import ForeignKey
 from autoslug import AutoSlugField
 
 from apps.accounts.models import User
+from apps.common.managers import GetOrNoneManager
 from apps.common.models import BaseModel
 
 
@@ -49,5 +50,3 @@ class Seller(BaseModel):
 
     is_approved = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.company_name}"
