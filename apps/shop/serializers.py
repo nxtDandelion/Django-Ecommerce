@@ -29,7 +29,7 @@ class CreateProductSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
     description = serializers.CharField()
     price_current = serializers.DecimalField(max_digits=10, decimal_places=2)
-    category_slug = serializers.SlugField()
+    category = CategorySerializer()
     in_stock = serializers.IntegerField()
     image1 = serializers.ImageField(required=False)
     image2 = serializers.ImageField(required=False)
