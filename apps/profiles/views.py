@@ -1,19 +1,29 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 from apps.common.utils import set_dict_attr
 from apps.profiles.models import ShippingAddress
 from apps.profiles.serializers import ProfileSerializer, ShippingAddressSerializer
 
+tags = ["Profiles"]
 
 class ProfileView(APIView):
     serializer_class = ProfileSerializer
 
+    @extend_schema(
+        summary="Get profile data",
+        description="Get data about your profile",
+        tags=tags,)
     def get(self, request):
         user = request.user
         serializer = self.serializer_class(user)
         return Response(data=serializer.data, status=200)
 
+    @extend_schema(
+        summary="Update profile data",
+        description="Update data about your profile",
+        tags=tags, )
     def put(self, request):
         user = request.user
         serializer = self.serializer_class(data=request.data)
@@ -23,6 +33,10 @@ class ProfileView(APIView):
         serializer = self.serializer_class(user)
         return Response(data=serializer.data, status=200)
 
+    @extend_schema(
+        summary="Deactivate account",
+        description="Deactivate your account",
+        tags=tags, )
     def delete(self, request):
         user = request.user
         user.is_active = False
@@ -32,12 +46,20 @@ class ProfileView(APIView):
 class ShippingAddressView(APIView):
     serializer_class = ShippingAddressSerializer
 
+    @extend_schema(
+        summary="Get shipping address",
+        description="Get all shipping addresses associated with your user",
+        tags=tags, )
     def get(self, request, *args, **kwargs):
         user = request.user
         shipping_address = ShippingAddress.objects.filter(user=user)
         serializer = self.serializer_class(shipping_address, many=True)
         return Response(data=serializer.data, status=200)
 
+    @extend_schema(
+        summary="Create shipping address",
+        description="Create shipping address associated with your user",
+        tags=tags, )
     def post(self, request, *args, **kwargs):
         user = request.user
         serializer = self.serializer_class(data=request.data)
@@ -54,7 +76,10 @@ class ShippingAddressViewID(APIView):
         shipping_address = ShippingAddress.objects.get_or_none(user=user, id=shipping_id)
         return shipping_address
 
-
+    @extend_schema(
+        summary="Get user shipping address",
+        description="Get user shipping address by id",
+        tags=tags, )
     def get(self, request, *args, **kwargs):
         user = request.user
         shipping_address = self.get_object(user, kwargs["id"])
@@ -63,7 +88,10 @@ class ShippingAddressViewID(APIView):
         serializer = self.serializer_class(shipping_address)
         return Response(data=serializer.data)
 
-
+    @extend_schema(
+        summary="Update shipping address",
+        description="Update shipping address by id",
+        tags=tags, )
     def put(self, request, *args, **kwargs):
         user = request.user
         shipping_address = self.get_object(user, kwargs["id"])
@@ -77,7 +105,10 @@ class ShippingAddressViewID(APIView):
         serializer = self.serializer_class(shipping_address)
         return Response(data=serializer.data, status=200)
 
-
+    @extend_schema(
+        summary="Delete shipping address",
+        description="Delete shipping address by id",
+        tags=tags, )
     def delete(self, request, *args, **kwargs):
         user = request.user
         shipping_address = self.get_object(user, kwargs["id"])

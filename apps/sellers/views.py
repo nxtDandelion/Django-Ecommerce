@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema
 from apps.common.utils import set_dict_attr
 from apps.sellers.models import Seller
 from apps.sellers.serializers import SellerSerializer
@@ -13,6 +14,10 @@ tags = ["Sellers"]
 class SellersView(APIView):
     serializer_class = SellerSerializer
 
+    @extend_schema(
+        summary="Create new seller",
+        description="Change default user to seller",
+        tags=tags, )
     def post(self, request):
         user = request.user
         serializer = self.serializer_class(data=request.data, partial=False)
@@ -29,6 +34,10 @@ class SellersView(APIView):
 class SellerProductsView(APIView):
     serializer_class = ProductSerializer
 
+    @extend_schema(
+        summary="Get seller's products",
+        description="Get all seller's products",
+        tags=tags, )
     def get(self, request, *args, **kwargs):
         seller = Seller.objects.get_or_none(user=request.user, is_approved=True)
         if not seller:
@@ -37,6 +46,10 @@ class SellerProductsView(APIView):
         serializer = self.serializer_class(products, many=True)
         return Response(data=serializer.data, status=200)
 
+    @extend_schema(
+        summary="Create product associated to seller",
+        description="Create product associated to seller",
+        tags=tags, )
     def post(self, request, *args, **kwargs):
         serializer = CreateProductSerializer(data=request.data)
         seller = Seller.objects.get_or_none(user=request.user, is_approved=True)
@@ -64,6 +77,10 @@ class SellerProductView(APIView):
         product = Product.objects.get_or_none(slug=slug)
         return product
 
+    @extend_schema(
+        summary="Change product info by slug",
+        description="Change product info by slug",
+        tags=tags, )
     def put(self, request, *args, **kwargs):
         product = self.get_obj(slug=kwargs['slug'])
         if not product:
@@ -88,6 +105,10 @@ class SellerProductView(APIView):
         else:
             return Response(data=serializer.errors, status=400)
 
+    @extend_schema(
+        summary="Delete product by slug",
+        description="Delete product by slug",
+        tags=tags, )
     def delete(self, request, *args, **kwargs):
         product = self.get_obj(slug=kwargs['slug'])
         if not product:
